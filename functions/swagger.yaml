@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Labyrinth API
+  description: |-
+      ## Documentation de l'API de génération de labyrinthe aléatoires Labyrinth API.
+      
+      Repository GitHub du projet : [darkgugu/labyrinth-API](https://github.com/darkgugu/labyrinth-API)
+      
+      Auteur : [Icham Duret - Darkgugu](https://github.com/darkgugu)
+      
+      ## Fonctions javascript fournies pour interpreter les tableaux retournés 
+      
+      Variables : 
+       - **H** : Hauteur du labyrinthe
+       - **L** : Largeur du labyrinthe
+       - **verticalArray** : tableau de murs verticaux retrouné par l'API
+       - **horizontalArray** : tableau de murs horizontaux retrouné par l'API
+       - **containerId** : Id de l'élément HTML dans lequel vous voulez afficher le labyrinthe
+       
+       La fonction `createGrid()` crée un labyrinthe dans un élément HTML donné en prennant en paramètres les tableaux récupérés avec l'API
+      
+      ```javascript
+        const createGrid = (H, L, horizontalArray, verticalArray, containerId) => {
+          const container = document.getElementById(containerId);
+          for (let i = 0; i < H; i++) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            for (let j = 0; j < L; j++) {
+              const cell = document.createElement('div');
+              cell.className = 'cell';
+              if(checkForWalls(verticalArray, [i, j])) {
+                  cell.style.borderLeft = 'none';
+                  cell.style.borderLeft = '1px solid black';
+              }
+              if(checkForWalls(horizontalArray, [i, j])) {
+                  cell.style.borderTop = 'none';
+                  cell.style.borderTop = '1px solid black';
+              }
+              j === L - 1 ? cell.style.borderRight = '1px solid black' : null;
+              i === H - 1 ? cell.style.borderBottom = '1px solid black' : null;
+              row.appendChild(cell);
+            }
+            container.appendChild(row);
+          }
+        }
+        
+        
+        const checkForWalls = (matrice, position) => {
+          if(matrice[position[0]][position[1]] === 1) {
+            return true;
+          }
+        }
+      ```
+      
+      Example de rendu :
+      
+      ![test](url)
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+servers:
+  - url: https://api-37xw2svdqa-uc.a.run.app
+tags: 
+  - name: Labyrinthe
+paths:
+  /labyrinth:
+    get:
+      tags: 
+        - Labyrinthe
+      summary: Crée un labyrinthe
+      description: Renvoie un objet contenant un tableau vertical et un tableau horizontal qui représentent les murs d'un labyrinthe
+      parameters:
+        - in: query
+          name: hauteur
+          schema:
+            type: integer
+          required: true
+          description: La hauteur du labyrinthe
+        - in: query
+          name: largeur
+          schema:
+            type: integer
+          required: true
+          description: La largeur du labyrinthe
+      responses:
+        '200':
+          description: Succès de la requête
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vertical:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: integer
+                      description: Tableau des murs verticaux
+                    example: [[1,0,1],[1,1,0],[1,1,0],[1,1,1]]
+                  horizontal:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: integer
+                      description: Tableau des murs horizontaux
+                    example: [[1,1,1,1],[0,1,1,1],[1,1,1,1]]
