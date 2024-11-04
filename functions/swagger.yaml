@@ -53,8 +53,24 @@ info:
       ```
       
       Example de rendu :
+
+      (labyrinthe de 40x40)
       
-      ![test](url)
+      ![Labyrinthe 40x40](https://imgur.com/a/O3EgOE7)
+
+      CSS pour le rendu :
+      
+      ```css
+        .row {
+          display: flex;
+        }
+        .cell {
+          width: 10px;
+          height: 10px;
+          background-color: orange;
+          border: 1px solid orange;
+        }
+      ```
   termsOfService: http://swagger.io/terms/
   version: 1.0.0
 servers:
